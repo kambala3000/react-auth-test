@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import './SignupPage.css';
+import SignupForm from './SignupForm';
 
 class SignupPage extends Component {
     render() {
         return (
             <div className="singup" >
-                This is SignupPage
+                <SignupForm />
             </div>
         );
     }

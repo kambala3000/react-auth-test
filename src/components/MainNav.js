@@ -12,7 +12,7 @@ class MainNav extends Component {
               </div>
               <div className="auth-box">
                 <div className="auth-box__signup">
-                  <Link to="/signup" className="auth-box__link">Sign Up</Link>
+                  <Link to="/signup" className="auth-box__link">Sign up</Link>
                 </div>
               </div>
             </nav>
