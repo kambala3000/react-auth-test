@@ -24,7 +24,7 @@ class SignupForm extends Component {
     registerUser(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log(this.state);
+        this.props.userSignupRequest(this.state);
     };
 
     render() {
@@ -57,7 +57,7 @@ class SignupForm extends Component {
               <div className="signup__item">
                 <label className="signup__label">Timezone</label>
                 <select name="timezone" className="signup__input signup__input--select" onChange={ this.handleChange } value={ this.state.timezone }>
-                  <option value="" className="">Choose...</option>
+                  <option value="" className="" disabled >Choose...</option>
                   { timezonesOptions }
                 </select>
               </div>
@@ -67,6 +67,10 @@ class SignupForm extends Component {
             </form>
             );
     }
-}
+};
+
+SignupForm.propTypes = {
+    userSignupRequest: React.PropTypes.func.isRequired
+};
 
 export default SignupForm;
