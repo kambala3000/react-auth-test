@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import timezones from '../data/timezones'
-
+import timezones from '../data/timezones';
 import classnames from 'classnames';
+
+import validateInput from '../utils/inputsValidation';
+import FormItem from './FormItem';
+
 
 class SignupForm extends Component {
     constructor(props) {
@@ -17,6 +20,7 @@ class SignupForm extends Component {
         }
         this.handleChange = this.handleChange.bind(this);
         this.registerUser = this.registerUser.bind(this);
+        this.isValid = this.isValid.bind(this);
     };
 
     handleChange(e) {
@@ -25,19 +29,30 @@ class SignupForm extends Component {
         })
     };
 
+    isValid() {
+        const { errors, isValid } = validateInput(this.state);
+        if (!isValid) {
+            this.setState({ errors });
+        }
+        return isValid;
+    }
+
     registerUser(e) {
         e.stopPropagation();
         e.preventDefault();
-        this.setState({
-            errors: {},
-            isLoading: true
-        });
-        this.props.userSignupRequest(this.state).catch(
-            (error) => this.setState({
-                errors: error.response.data,
-                isLoading: false
-            })
-        );
+
+        if (this.isValid()) {     
+            this.setState({
+                errors: {},
+                isLoading: true
+            });
+            this.props.userSignupRequest(this.state).catch(
+                (error) => this.setState({
+                    errors: error.response.data,
+                    isLoading: false
+                })
+            );
+        }
     };
 
     render() {
@@ -53,37 +68,41 @@ class SignupForm extends Component {
             <form className="signup__form" onSubmit={ this.registerUser }>
               <h3 className="signup__header">Be one of us!</h3>
 
-              <div className="signup__item">
-                <p className="signup__item-head">
-                  <label htmlFor="formLogin" className="signup__label">Login</label>
-                  { errors.login && <span className="signup__error">  { errors.login }</span> }
-                </p>
-                <input type="text" className={classnames("signup__input", { 'signup__input--err': errors.login })} name="login" id="formLogin" value={ this.state.login } onChange={ this.handleChange } />
-              </div>
+              <FormItem 
+                fieldName="login"
+                value={ this.state.login }
+                label="Login"
+                error={ errors.login }
+                type="text"
+                onChange={ this.handleChange }
+              />
 
-              <div className="signup__item">
-                <p className="signup__item-head">
-                  <label htmlFor="formEmail" className="signup__label">Email</label>
-                  { errors.email && <span className="signup__error">  { errors.email }</span> }
-                </p>
-                <input type="email" className={classnames("signup__input", { 'signup__input--err': errors.email })} name="email" id="formEmail" onChange={ this.handleChange } />
-              </div>
+              <FormItem 
+                fieldName="email"
+                value={ this.state.email }
+                label="Email"
+                error={ errors.email }
+                type="email"
+                onChange={ this.handleChange }
+              />
 
-              <div className="signup__item">
-                <p className="signup__item-head">
-                  <label htmlFor="formPassword" className="signup__label">Password</label>
-                  { errors.password && <span className="signup__error">  { errors.password }</span> }
-                </p>
-                <input type="text" className={classnames("signup__input", { 'signup__input--err': errors.password })} name="password" id="formPassword" onChange={ this.handleChange } />
-              </div>
+              <FormItem 
+                fieldName="password"
+                value={ this.state.password }
+                label="Password"
+                error={ errors.password }
+                type="text"
+                onChange={ this.handleChange }
+              />
 
-              <div className="signup__item">
-                <p className="signup__item-head">
-                  <label htmlFor="formPasswordConfirm" className="signup__label">Confirm password</label>
-                  { errors.passwordConfirm && <span className="signup__error">  { errors.passwordConfirm }</span> }
-                </p>
-                <input type="text" className={classnames("signup__input", { 'signup__input--err': errors.passwordConfirm })} name="passwordConfirm" id="formPasswordConfirm" onChange={ this.handleChange } />
-              </div>
+              <FormItem 
+                fieldName="passwordConfirm"
+                value={ this.state.passwordConfirm }
+                label="Confirm password"
+                error={ errors.passwordConfirm }
+                type="text"
+                onChange={ this.handleChange }
+              />
 
               <div className="signup__item">
                 <p className="signup__item-head">
