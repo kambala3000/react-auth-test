@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import timezones from '../data/timezones';
 import classnames from 'classnames';
+// import { browserHistory } from 'react-router';
 
 import validateInput from '../utils/inputsValidation';
 import FormItem from './FormItem';
@@ -46,12 +47,14 @@ class SignupForm extends Component {
                 errors: {},
                 isLoading: true
             });
-            this.props.userSignupRequest(this.state).catch(
-                (error) => this.setState({
-                    errors: error.response.data,
-                    isLoading: false
-                })
-            );
+            this.props.userSignupRequest(this.state)
+                .then(() => this.context.router.push('/'))
+                .catch(
+                    (error) => this.setState({
+                        errors: error.response.data,
+                        isLoading: false
+                    })
+                );
         }
     };
 
@@ -125,6 +128,10 @@ class SignupForm extends Component {
 
 SignupForm.propTypes = {
     userSignupRequest: React.PropTypes.func.isRequired
+};
+
+SignupForm.contextTypes = {
+    router: React.PropTypes.object.isRequired
 };
 
 export default SignupForm;
