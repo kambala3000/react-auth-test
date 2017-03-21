@@ -51,7 +51,7 @@ class SignupForm extends Component {
                 .then(() => {
                     this.props.addFlashMessage({
                         type: 'success',
-                        text: 'Welcome!'
+                        text: 'You are signed up. Welcome!'
                     });
                     this.context.router.push('/');
                 })

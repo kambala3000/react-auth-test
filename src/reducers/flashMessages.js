@@ -1,4 +1,4 @@
-import { ADD_FLASH_MESSAGE } from '../actions/types';
+import { ADD_FLASH_MESSAGE, DELETE_FLASH_MESSAGE } from '../actions/types';
 import shortid from 'shortid';
 
 export default (state = [], action = {}) => {
@@ -11,7 +11,11 @@ export default (state = [], action = {}) => {
                     type: action.message.type,
                     text: action.message.text
                 }
-            ]
+            ];
+        case DELETE_FLASH_MESSAGE:
+            return [
+                ...state.filter((item, index) => item.id !== action.id)
+            ];
         default: 
             return state;
     }
