@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import timezones from '../data/timezones';
 import classnames from 'classnames';
-// import { browserHistory } from 'react-router';
 
 import validateInput from '../utils/inputsValidation';
 import FormItem from './FormItem';
