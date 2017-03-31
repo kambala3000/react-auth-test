@@ -1,18 +1,21 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import './SignupPage.css';
-import SignupForm from './SignupForm';
-import { userSignupRequest } from '../actions/signupActions';
-import { addFlashMessage } from '../actions/flashMessagesActions';
+import "./SignupPage.css";
+import SignupForm from "./SignupForm";
+import { userSignupRequest } from "../actions/signupActions";
+import { addFlashMessage } from "../actions/flashMessagesActions";
 
 class SignupPage extends Component {
     render() {
         return (
             <div className="singup">
-              <SignupForm userSignupRequest={ this.props.userSignupRequest } addFlashMessage={ this.props.addFlashMessage } />
+                <SignupForm
+                    userSignupRequest={this.props.userSignupRequest}
+                    addFlashMessage={this.props.addFlashMessage}
+                />
             </div>
-            );
+        );
     }
 }
 
@@ -21,4 +24,6 @@ SignupPage.propTypes = {
     addFlashMessage: React.PropTypes.func.isRequired
 };
 
-export default connect(null, { userSignupRequest, addFlashMessage })(SignupPage);
+export default connect(null, { userSignupRequest, addFlashMessage })(
+    SignupPage
+);

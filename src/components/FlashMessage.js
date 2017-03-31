@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import classnames from 'classnames';
+import React, { Component } from "react";
+import classnames from "classnames";
 
 class FlashMessage extends Component {
     constructor(props) {
@@ -9,17 +9,24 @@ class FlashMessage extends Component {
 
     handleClick(e) {
         this.props.deleteFlashMessage(this.props.message.id);
-    };
+    }
 
     render() {
         const { type, text } = this.props.message;
         return (
-            <div className={classnames('flashMessages__item', {
-                'flashMessages__item--green': type === 'success',
-                'flashMessages__item--red': type === 'error',
-            })}>
-                <p className="flashMessages__text">{ text }</p>
-                <button className="flashMessages__close" onClick={ this.handleClick } >&times;</button>
+            <div
+                className={classnames("flashMessages__item", {
+                    "flashMessages__item--green": type === "success",
+                    "flashMessages__item--red": type === "error"
+                })}
+            >
+                <p className="flashMessages__text">{text}</p>
+                <button
+                    className="flashMessages__close"
+                    onClick={this.handleClick}
+                >
+                    ×
+                </button>
             </div>
         );
     }
@@ -28,6 +35,6 @@ class FlashMessage extends Component {
 FlashMessage.propTypes = {
     message: React.PropTypes.object.isRequired,
     deleteFlashMessage: React.PropTypes.func.isRequired
-}
+};
 
 export default FlashMessage;
