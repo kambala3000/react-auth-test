@@ -1,25 +1,27 @@
-import React, { Component } from "react";
-import timezones from "../data/timezones";
-import classnames from "classnames";
+import React, { Component } from 'react';
+import timezones from '../data/timezones';
+import classnames from 'classnames';
 
-import validateInput from "../utils/inputsValidation";
-import FormItem from "./FormItem";
+import validateInput from '../utils/inputsValidation';
+import FormItem from './FormItem';
 
 class SignupForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            login: "",
-            email: "",
-            password: "",
-            passwordConfirm: "",
-            timezone: "",
+            login: '',
+            email: '',
+            password: '',
+            passwordConfirm: '',
+            timezone: '',
             errors: {},
-            isLoading: false
+            isLoading: false,
+            invalid: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.registerUser = this.registerUser.bind(this);
         this.isValid = this.isValid.bind(this);
+        this.checkUserExists = this.checkUserExists.bind(this);
     }
 
     handleChange(e) {
@@ -36,6 +38,25 @@ class SignupForm extends Component {
         return isValid;
     }
 
+    checkUserExists(e) {
+        const field = e.target.name;
+        const val = e.target.value;
+        if (val !== '') {
+            this.props.isUserExists(val).then(res => {
+                let errors = this.state.errors;
+                let invalid;
+                if (res.data.user) {
+                    errors[field] = 'There is user with such ' + field;
+                    invalid = true;
+                } else {
+                    errors[field] = '';
+                    invalid = false;
+                }
+                this.setState({ errors, invalid });
+            });
+        }
+    }
+
     registerUser(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -49,10 +70,10 @@ class SignupForm extends Component {
                 .userSignupRequest(this.state)
                 .then(() => {
                     this.props.addFlashMessage({
-                        type: "success",
-                        text: "You are signed up. Welcome!"
+                        type: 'success',
+                        text: 'You are signed up. Welcome!'
                     });
-                    this.context.router.push("/");
+                    this.context.router.push('/');
                 })
                 .catch(error =>
                     this.setState({
@@ -86,6 +107,7 @@ class SignupForm extends Component {
                     error={errors.login}
                     type="text"
                     onChange={this.handleChange}
+                    checkUserExists={this.checkUserExists}
                 />
 
                 <FormItem
@@ -95,6 +117,7 @@ class SignupForm extends Component {
                     error={errors.email}
                     type="email"
                     onChange={this.handleChange}
+                    checkUserExists={this.checkUserExists}
                 />
 
                 <FormItem
@@ -120,16 +143,14 @@ class SignupForm extends Component {
                         <label className="signup__label">Timezone</label>
                         {errors.timezone &&
                             <span className="signup__error">
-                                {" "}{errors.timezone}
+                                {' '}{errors.timezone}
                             </span>}
                     </p>
                     <select
                         name="timezone"
-                        className={classnames(
-                            "signup__input",
-                            "signup__input--select",
-                            { "signup__input--err": errors.timezone }
-                        )}
+                        className={classnames('signup__input', 'signup__input--select', {
+                            'signup__input--err': errors.timezone
+                        })}
                         onChange={this.handleChange}
                         value={this.state.timezone}
                     >
@@ -141,10 +162,7 @@ class SignupForm extends Component {
                 </div>
 
                 <div className="signup__btns-box">
-                    <button
-                        className="btn btn--blue"
-                        disabled={this.state.isLoading}
-                    >
+                    <button className="btn btn--blue" disabled={this.state.isLoading}>
                         Sign up
                     </button>
                 </div>
@@ -155,6 +173,7 @@ class SignupForm extends Component {
 
 SignupForm.propTypes = {
     userSignupRequest: React.PropTypes.func.isRequired,
+    isUserExists: React.PropTypes.func.isRequired,
     addFlashMessage: React.PropTypes.func.isRequired
 };
 

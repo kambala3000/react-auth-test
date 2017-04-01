@@ -19,7 +19,6 @@ function validateInput(data, additionalValid) {
             if (err) return err;
             if (user) {
                 if (user.login === login) {
-                    console.log(user.login);
                     errors.login = 'There is user with such username';
                 }
             }
@@ -28,7 +27,6 @@ function validateInput(data, additionalValid) {
             if (err) return err;
             if (user) {
                 if (user.email === email) {
-                    console.log(user.email);
                     errors.email = 'There is user with such email';
                 }
             }
@@ -50,6 +48,24 @@ app.use(cors());
 
 const server = app.listen(serverPort, () => {
     console.log(`We are live on ${serverPort}`);
+});
+
+// get user
+app.get('/users:id', (req, res) => {
+    return Promise.all([
+        User.findOne({ login: req.params.id }, 'login', (err, user) => {
+            if (err) return err;
+            if (user) {
+                res.json({ user });
+            }
+        }),
+        User.findOne({ email: req.params.id }, 'email', (err, user) => {
+            if (err) return err;
+            if (user) {
+                res.json({ user });
+            }
+        })
+    ]);
 });
 
 // new user

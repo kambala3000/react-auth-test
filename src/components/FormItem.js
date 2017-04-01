@@ -1,7 +1,7 @@
-import React from "react";
-import classnames from "classnames";
+import React from 'react';
+import classnames from 'classnames';
 
-const FormItem = ({ fieldName, value, label, error, type, onChange }) => {
+const FormItem = ({ fieldName, value, label, error, type, onChange, checkUserExists }) => {
     return (
         <div>
             <p className="signup__item-head">
@@ -10,12 +10,13 @@ const FormItem = ({ fieldName, value, label, error, type, onChange }) => {
             </p>
             <input
                 type={type}
-                className={classnames("signup__input", {
-                    "signup__input--err": error
+                className={classnames('signup__input', {
+                    'signup__input--err': error
                 })}
                 name={fieldName}
                 value={value}
                 onChange={onChange}
+                onBlur={checkUserExists}
             />
         </div>
     );
@@ -27,11 +28,12 @@ FormItem.propTypes = {
     label: React.PropTypes.string.isRequired,
     error: React.PropTypes.string,
     type: React.PropTypes.string.isRequired,
-    onChange: React.PropTypes.func.isRequired
+    onChange: React.PropTypes.func.isRequired,
+    checkUserExists: React.PropTypes.func
 };
 
 FormItem.defaultProps = {
-    type: "text"
+    type: 'text'
 };
 
 export default FormItem;
