@@ -1,14 +1,14 @@
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import mongoose from "mongoose";
 
-import { serverPort } from './config.json';
-import inputsValidation from './utils/inputsValidation';
-import * as db from './utils/dbUtils';
-import './models/User';
+import { serverPort } from "./config.json";
+import inputsValidation from "./utils/inputsValidation";
+import * as db from "./utils/dbUtils";
+import "./models/User";
 
-const User = mongoose.model('User');
+const User = mongoose.model("User");
 
 function validateInput(data, additionalValid) {
     let { errors } = additionalValid(data);
@@ -19,7 +19,7 @@ function validateInput(data, additionalValid) {
             if (err) return err;
             if (user) {
                 if (user.login === login) {
-                    errors.login = 'There is user with such username';
+                    errors.login = "There is user with such username";
                 }
             }
         }),
@@ -27,7 +27,7 @@ function validateInput(data, additionalValid) {
             if (err) return err;
             if (user) {
                 if (user.email === email) {
-                    errors.email = 'There is user with such email';
+                    errors.email = "There is user with such email";
                 }
             }
         })
@@ -37,6 +37,28 @@ function validateInput(data, additionalValid) {
             isValid: Object.keys(errors).length === 0
         };
     });
+
+    // return User.find(
+    //     {
+    //         $or: [{ login }, { email }]
+    //     },
+    //     (err, user) => {
+    //         if (err) return err;
+    //         if (user) {
+    //             if (user.login === login) {
+    //                 errors.login = "There is user with such username";
+    //             }
+    //             if (user.email === email) {
+    //                 errors.email = "There is user with such email";
+    //             }
+    //         }
+    //     }
+    // ).then(() => {
+    //     return {
+    //         errors,
+    //         isValid: Object.keys(errors).length === 0
+    //     };
+    // });
 }
 
 db.setUpConnection();
@@ -51,15 +73,15 @@ const server = app.listen(serverPort, () => {
 });
 
 // get user
-app.get('/users:id', (req, res) => {
+app.get("/users:id", (req, res) => {
     return Promise.all([
-        User.findOne({ login: req.params.id }, 'login', (err, user) => {
+        User.findOne({ login: req.params.id }, "login", (err, user) => {
             if (err) return err;
             if (user) {
                 res.json({ user });
             }
         }),
-        User.findOne({ email: req.params.id }, 'email', (err, user) => {
+        User.findOne({ email: req.params.id }, "email", (err, user) => {
             if (err) return err;
             if (user) {
                 res.json({ user });
@@ -69,7 +91,7 @@ app.get('/users:id', (req, res) => {
 });
 
 // new user
-app.post('/users', (req, res) => {
+app.post("/users", (req, res) => {
     validateInput(req.body, inputsValidation).then(({ errors, isValid }) => {
         if (isValid) {
             db
